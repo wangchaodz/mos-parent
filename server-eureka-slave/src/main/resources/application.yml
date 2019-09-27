@@ -1,0 +1,27 @@
+server:
+  port: 9000
+eureka:
+  instance:
+    hostname: myslave
+  client:
+    register-with-eureka: true # 是否将自己注册到Eureka Server，默认为true。由于当前应用就是Eureka Server，故而设为false
+    fetch-registry: true # 表示是否从Eureka Sever获取注册信息，默认为true。因为这个一个单节点的Eureka Server，不需要同步其他的Eureka Server节点的数据，故而设为false
+#    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka # 设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。
+    service-url:
+      defaultZone: http://root:123456@mymaster:8000/eureka # 设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。
+    healthcheck:  # 开启健康检查
+      enabled: true
+spring:
+  application:
+    name: server-eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: info  # 排除端点，不可访问；多端点之间用逗号分隔
+        include: shutdown,httptrace,env  # 包含端点，可以访问；多端点之间用逗号分隔
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
