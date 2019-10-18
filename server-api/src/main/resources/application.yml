@@ -1,0 +1,16 @@
+#配置eureka获取服务地址
+server:
+  port: 8001
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    #${server.port}为该服务的端口号
+    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
+    #配置Swagger相关信息
+    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html
+  client:
+    register-with-eureka: true # 是否将自己注册到Eureka Server，默认为true。由于当前应用就是Eureka Server，故而设为false
+    fetch-registry: true # 表示是否从Eureka Sever获取注册信息，默认为true。因为这个一个单节点的Eureka Server，不需要同步其他的Eureka Server节点的数据，故而设为false
+    service-url:
+      defaultZone: http://myslave:9000/eureka # 设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。
